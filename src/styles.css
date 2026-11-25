@@ -247,3 +247,43 @@ main > h2 { margin-bottom: 1.4rem; }
   flex-wrap: wrap;
   gap: 10px;
 }
+
+/* FIX: Moderator sidebar overflow */
+
+.shell > aside {
+    min-width: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.shell > aside .me {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.shell > aside .me > *,
+.shell > aside .role-info,
+.shell > aside .ghost,
+.shell > aside button {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.shell > aside .role-info,
+.shell > aside .me .ghost,
+.shell > aside > .ghost {
+    width: 100%;
+}
+
+.shell > aside .role-info {
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+    .shell > aside {
+        width: 100%;
+        overflow: visible;
+    }
+}
