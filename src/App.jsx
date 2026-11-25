@@ -76,19 +76,47 @@ export default function App() {
   const [, tick] = useState(0)
   const refresh = () => tick(t => t + 1)
 
-  const home = u =>
-    (u.role === 'admin' || u.role === 'editor' ? '/dashboard' : '/pages')
+  // Separate dashboard for every role
+  const home = u => {
+    if (u.role === 'admin') return '/admin'
+    if (u.role === 'editor') return '/editor'
+    return '/user'
+  }
 
   useEffect(() => {
     if (a === 'view') return
 
-    if (!user && a !== 'login' && a !== 'signup') go('/login')
+    if (!user && a !== 'login' && a !== 'signup') {
+      go('/login')
+      return
+    }
 
-    if (user && (!a || a === 'login' || a === 'signup')) go(home(user))
+    if (user) {
+      const dashboardRoutes = ['admin', 'editor', 'user']
 
-    if (user && a === 'users' && user.role !== 'admin') go('/pages')
+      if (
+        !a ||
+        a === 'login' ||
+        a === 'signup' ||
+        dashboardRoutes.includes(a) && a !== home(user).slice(1)
+      ) {
+        go(home(user))
+        return
+      }
+
+      if (a === 'users' && user.role !== 'admin') {
+        go(home(user))
+        return
+      }
+
+      if (a === 'dashboard') {
+        go(home(user))
+        return
+      }
+    }
   }, [path, user])
 
+  // Login redirects according to role
   const login = u => {
     put('cms_session', u)
     setUser(u)
@@ -109,8 +137,9 @@ export default function App() {
       : <Login onDone={login} />
   }
 
+  // Role-based sidebar navigation
   const nav = [
-    ['/dashboard', 'Dashboard'],
+    [home(user), 'Dashboard'],
     ['/pages', canReview(user.role) ? 'All pages' : 'My pages'],
     ['/edit/new', 'New page'],
     ...(user.role === 'admin' ? [['/users', 'Users']] : [])
@@ -149,9 +178,14 @@ export default function App() {
       </aside>
 
       <main>
-        {a === 'dashboard' && <Dashboard user={user} />}
+        {(a === 'admin' || a === 'editor' || a === 'user') && (
+          <Dashboard user={user} />
+        )}
+
         {a === 'pages' && <Pages user={user} refresh={refresh} />}
+
         {a === 'edit' && <Editor key={b} id={b} user={user} />}
+
         {a === 'users' && user.role === 'admin' && (
           <Users me={user} refresh={refresh} />
         )}
@@ -213,8 +247,6 @@ function Login({ onDone }) {
         </>
       }
     >
-      {/* Available roles shown ONLY on login page */}
-
       <div className="role-info">
         <span>Available roles</span>
         <b>Admin</b>
@@ -278,8 +310,6 @@ function Signup({ onDone }) {
       )
     }
 
-    // Every new account automatically gets USER role
-
     const u = {
       id: uid(),
       name: f.name.trim(),
@@ -303,8 +333,6 @@ function Signup({ onDone }) {
         </>
       }
     >
-      {/* Available Roles intentionally removed from signup */}
-
       <label>
         Name
         <input
