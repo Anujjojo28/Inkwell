@@ -217,3 +217,33 @@ main > h2 { margin-bottom: 1.4rem; }
 }
 
 .role-info{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin:.9rem 0 1rem;padding:.75rem;background:rgba(145,92,255,.08);border:1px solid rgba(145,92,255,.25);border-radius:10px}.role-info span{width:100%;font-size:.75rem;color:var(--muted,#a6aec4);text-transform:uppercase;letter-spacing:.08em}.role-info b{font-size:.75rem;font-weight:600;padding:.28rem .55rem;border-radius:99px;background:rgba(145,92,255,.18);color:#c8adff}.pill.editor{background:rgba(42,197,255,.14);color:#58cfff}
+/* Fix user management card layout */
+.cards {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.card .pill {
+  width: fit-content;
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+}
+
+.card select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.card .row {
+  flex-wrap: wrap;
+  gap: 10px;
+}
