@@ -215,3 +215,5 @@ main > h2 { margin-bottom: 1.4rem; }
   .bar { grid-template-columns: 90px 1fr 28px; gap: .45rem; font-size: .78rem; }
   .tools input, .tools select { max-width: 100%; width: 100%; }
 }
+
+.role-info{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin:.9rem 0 1rem;padding:.75rem;background:rgba(145,92,255,.08);border:1px solid rgba(145,92,255,.25);border-radius:10px}.role-info span{width:100%;font-size:.75rem;color:var(--muted,#a6aec4);text-transform:uppercase;letter-spacing:.08em}.role-info b{font-size:.75rem;font-weight:600;padding:.28rem .55rem;border-radius:99px;background:rgba(145,92,255,.18);color:#c8adff}.pill.editor{background:rgba(42,197,255,.14);color:#58cfff}
