@@ -4,7 +4,6 @@ const put = (k, v) => localStorage.setItem(k, JSON.stringify(v))
 const uid = () => Math.random().toString(36).slice(2, 9)
 const slugify = s => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 const go = h => { location.hash = h }
-const ADMIN_CODE = 'CMS-ADMIN'
 const TYPES = { heading: 'Heading', text: 'Paragraph', image: 'Image URL', button: 'Button' }
 
 if (!get('cms_users')) put('cms_users', [{ id: 'a1', name: 'Admin', email: 'admin@cms.com', password: 'admin123', role: 'admin' }])
@@ -58,27 +57,24 @@ function Login({ onDone }) {
     const u = get('cms_users', []).find(x => x.email === f.email.trim().toLowerCase() && x.password === f.password)
     u ? onDone(u) : setErr('Email or password is incorrect. Check both and try again.')
   }
-  return <Auth title="Log in" sub="Demo admin: admin@cms.com / admin123" foot={<>New here? <a href="#/signup">Create an account</a></>}>
+  return <Auth title="Log in" sub="Welcome back. Enter your details to continue." foot={<>New here? <a href="#/signup">Create an account</a></>}>
     <label>Email<input value={f.email} onChange={e => setF({ ...f, email: e.target.value })} /></label>
     <label>Password<input type="password" value={f.password} onChange={e => setF({ ...f, password: e.target.value })} onKeyDown={e => e.key === 'Enter' && submit()} /></label>
     {err && <p className="err">{err}</p>}<button onClick={submit}>Log in</button></Auth>
 }
 function Signup({ onDone }) {
-  const [f, setF] = useState({ name: '', email: '', password: '', role: 'user', code: '' }), [err, setErr] = useState('')
+  const [f, setF] = useState({ name: '', email: '', password: '' }), [err, setErr] = useState('')
   const submit = () => {
     const users = get('cms_users', []), email = f.email.trim().toLowerCase()
     if (!f.name.trim() || !email.includes('@') || f.password.length < 6) return setErr('Enter your name, a valid email and a password of 6+ characters.')
     if (users.some(u => u.email === email)) return setErr('That email already has an account. Log in instead.')
-    if (f.role === 'admin' && f.code !== ADMIN_CODE) return setErr('Admin access code is wrong. Demo code: ' + ADMIN_CODE)
-    const u = { id: uid(), name: f.name.trim(), email, password: f.password, role: f.role }
+    const u = { id: uid(), name: f.name.trim(), email, password: f.password, role: 'user' }
     put('cms_users', [...users, u]); onDone(u)
   }
-  return <Auth title="Create account" sub="Choose the module you need." foot={<>Have an account? <a href="#/login">Log in</a></>}>
+  return <Auth title="Create account" sub="Sign up to start writing pages." foot={<>Have an account? <a href="#/login">Log in</a></>}>
     <label>Name<input value={f.name} onChange={e => setF({ ...f, name: e.target.value })} /></label>
     <label>Email<input value={f.email} onChange={e => setF({ ...f, email: e.target.value })} /></label>
-    <label>Password<input type="password" value={f.password} onChange={e => setF({ ...f, password: e.target.value })} /></label>
-    <label>Role<select value={f.role} onChange={e => setF({ ...f, role: e.target.value })}><option value="user">User (writer)</option><option value="admin">Admin</option></select></label>
-    {f.role === 'admin' && <label>Admin code<input value={f.code} onChange={e => setF({ ...f, code: e.target.value })} /></label>}
+    <label>Password<input type="password" value={f.password} onChange={e => setF({ ...f, password: e.target.value })} onKeyDown={e => e.key === 'Enter' && submit()} /></label>
     {err && <p className="err">{err}</p>}<button onClick={submit}>Sign up</button></Auth>
 }
 
