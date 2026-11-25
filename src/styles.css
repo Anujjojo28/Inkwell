@@ -287,8 +287,12 @@ main > h2 { margin-bottom: 1.4rem; }
         overflow: visible;
     }
 }
-
-/* Hide available roles on signup page */
-.auth-card .role-info {
+/* Hide roles only on Create Account page */
+.auth-card.signup .role-info {
     display: none !important;
+}
+
+/* Keep roles visible on Login page */
+.auth-card.login .role-info {
+    display: flex;
 }
