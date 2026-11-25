@@ -287,3 +287,8 @@ main > h2 { margin-bottom: 1.4rem; }
         overflow: visible;
     }
 }
+
+/* Hide available roles on signup page */
+.auth-card .role-info {
+    display: none !important;
+}
