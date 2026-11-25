@@ -94,7 +94,7 @@ function Dashboard({ user }) {
 function Pages({ user, refresh }) {
   const [q, setQ] = useState(''), [st, setSt] = useState('all')
   const all = get('cms_pages', []), admin = user.role === 'admin'
-  const pages = (admin ? all : all.filter(p => p.author === user.id)).filter(p => (st === 'all' || p.status === st) && p.title.toLowerCase().includes(q.toLowerCase()))
+ const pages = (admin ? all : all.filter(p => p.author === user.id || p.status === 'published')).filter(p => (st === 'all' || p.status === st) && p.title.toLowerCase().includes(q.toLowerCase()))
   const setStatus = (id, status) => { put('cms_pages', all.map(p => p.id === id ? { ...p, status } : p)); refresh() }
   const del = id => { if (confirm('Delete this page permanently?')) { put('cms_pages', all.filter(p => p.id !== id)); refresh() } }
   return <><div className="row"><h2>{admin ? 'All pages' : 'My pages'}</h2><a className="btn" href="#/edit/new">New page</a></div>
